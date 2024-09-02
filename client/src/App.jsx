@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-      <video className='video' controls src="https://task-32-server.vercel.app/video"></video>
+      <video className='video' controls src="http://localhost:3000/video"></video>
     </>
   )
 }

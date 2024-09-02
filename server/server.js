@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createReadStream, statSync } from 'fs';
-import cors from 'cors';  // Import the cors package
+import cors from 'cors';
 
 const app = express();
 
@@ -23,11 +23,17 @@ app.get('/video', (req, res) => {
   const range = req.headers.range;
   const stat = statSync(videoPath);
   const fileSize = stat.size;
-  
+
+  // Define the chunk size (1 MB)
+  const CHUNK_SIZE = 1 * 1024 * 1024; // 1 MB
+
   if (range) {
-    const [start, end] = range.replace(/bytes=/, "").split("-").map(Number);
+    const [startStr, endStr] = range.replace(/bytes=/, "").split("-");
+    const start = parseInt(startStr, 10);
+    const end = endStr ? parseInt(endStr, 10) : Math.min(start + CHUNK_SIZE - 1, fileSize - 1);
+
     const chunkStart = start || 0;
-    const chunkEnd = Math.min(end || fileSize - 1, fileSize - 1);
+    const chunkEnd = Math.min(end, fileSize - 1);
 
     res.writeHead(206, {
       "Content-Range": `bytes ${chunkStart}-${chunkEnd}/${fileSize}`,
@@ -39,6 +45,7 @@ app.get('/video', (req, res) => {
     const stream = createReadStream(videoPath, { start: chunkStart, end: chunkEnd });
     stream.pipe(res);
   } else {
+    // Serve the entire file if no range is specified
     res.sendFile(videoPath);
   }
 });
