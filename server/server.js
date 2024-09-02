@@ -40,6 +40,7 @@ app.get('/video', (req, res) => {
       "Accept-Ranges": "bytes",
       "Content-Length": chunkEnd - chunkStart + 1,
       "Content-Type": "video/mp4",
+      "Access-Control-Allow-Origin": "*", // Allow all origins
     });
 
     const stream = createReadStream(videoPath, { start: chunkStart, end: chunkEnd });
