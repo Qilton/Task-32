@@ -10,11 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Enable CORS for all routes
-app.use(cors({
-  origin: 'http://example.com',  // Allow requests only from this origin
-  methods: ['GET', 'POST'],      // Allow only specific methods
-  allowedHeaders: ['Content-Type'], // Allow only specific headers
-}));
+app.use(cors());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
