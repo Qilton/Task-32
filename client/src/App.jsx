@@ -1,15 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from 'react';
 
 function App() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [videoUrl, setVideoUrl] = useState('');
 
-  return (
-    <>
-      <video className='video' controls src="https://task-32-server.vercel.app/video"></video>
-    </>
-  )
+    const handleFormSubmit = (event) => {
+        event.preventDefault();
+
+        if (name && email) {
+            // You can also add validation for email format if necessary
+            setVideoUrl('https://task-32-server.vercel.app/video');
+        } else {
+            alert('Please enter both name and email.');
+        }
+    };
+
+    return (
+        <div className="App">
+            <form onSubmit={handleFormSubmit}>
+                <div>
+                    <label>
+                        Name:
+                        <input type="text" value={name}  onChange={(e) => setName(e.target.value)} required />
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        Email:
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    </label>
+                </div>
+                <button type="submit">Play Video</button>
+            </form>
+            {videoUrl && (
+                <video controls width="600">
+                    <source src={videoUrl} type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            )}
+        </div>
+    );
 }
 
-export default App
+export default App;
